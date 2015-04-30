@@ -8,4 +8,5 @@
     <string name="title_activity_alarm">AlarmActivity</string>
 
     <string name="new_activity">Success! A new activity has been started.</string>
+    <string name="alarmMessage">"Starting new service in… "</string>
 </resources>

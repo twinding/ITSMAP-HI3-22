@@ -1,6 +1,10 @@
 package dk.itsmap.group22.itsmap_hi3_22;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,17 +12,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "AlarmServiceTest";
+    private TextView outputView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.i(TAG, "onCreate");
+
+        outputView = (TextView) findViewById(R.id.outputView);
+        IntentFilter alarmIntentFilter = new IntentFilter(AlarmService.ALARM_MESSAGE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i(TAG, "onReceive");
+                outputView.setText(intent.getExtras().getString("message"));
+            }
+        }, alarmIntentFilter);
     }
 
     public void sendTime(View view) {
@@ -27,13 +45,46 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(this, "Please input a time", Toast.LENGTH_SHORT).show();
         } else {
             Log.i(TAG, "Attempting to start service");
-            int data = Integer.parseInt(editText.getText().toString());
+            try {
+                int data = Integer.parseInt(editText.getText().toString());
+                Intent intent = new Intent(this, AlarmService.class);
+                intent.putExtra("data", data);
 
-            Intent intent = new Intent(this, AlarmService.class);
-            intent.putExtra("data", data);
-
-            startService(intent);
+                startService(intent);
+            } catch (NumberFormatException nfe) {
+                Toast.makeText(this, "Please input a time of 2,147,483,647 or less", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
     }
 
     @Override

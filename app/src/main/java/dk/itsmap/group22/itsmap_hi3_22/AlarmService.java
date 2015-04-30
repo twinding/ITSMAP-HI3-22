@@ -5,21 +5,26 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.Calendar;
 
 public class AlarmService extends IntentService {
 
-    private static final String ALARM_MESSAGE = "alarm_message";
+    public static final String ALARM_MESSAGE = "dk.itsmap.group22.itsmap_hi3_22.alarm_message";
     private static final String TAG = "AlarmServiceTest";
+
+    private Runnable updateTask;
+    private Handler handler = new Handler();
 
     public AlarmService() { super("AlarmService"); }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "AlarmService onHandleIntent");
-        int delay = intent.getIntExtra("data", 1);
+        final int delay = intent.getIntExtra("data", 1);
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
@@ -31,5 +36,19 @@ public class AlarmService extends IntentService {
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 
+        updateTask = new Runnable() {
+            int repetitions = delay;
+
+            @Override
+            public void run() {
+                if (repetitions == 0) return;
+                Intent messageIntent = new Intent(ALARM_MESSAGE);
+                messageIntent.putExtra("message", getResources().getString(R.string.alarmMessage) + Integer.toString(repetitions));
+                LocalBroadcastManager.getInstance(AlarmService.this).sendBroadcast(messageIntent);
+                repetitions--;
+                handler.postDelayed(updateTask, 1000);
+            }
+        };
+        handler.post(updateTask);
     }
 }

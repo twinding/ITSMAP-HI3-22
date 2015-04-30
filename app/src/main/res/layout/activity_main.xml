@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/textView"
         android:hint="@string/editTextText"
-        android:inputType="number" />
+        android:inputType="number"
+        android:digits="0123456789"/>
 
     <TextView
         android:id="@+id/textView"
@@ -24,10 +25,17 @@
         android:layout_alignBaseline="@+id/inputField"/>
 
     <Button
+        android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/inputField"
         android:text="@string/buttonText"
         android:onClick="sendTime"/>
+
+    <TextView
+        android:id="@+id/outputView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendButton" />
 
 </RelativeLayout>
