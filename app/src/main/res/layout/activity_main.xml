@@ -24,11 +24,18 @@
         android:layout_alignParentEnd="true"
         android:layout_alignBaseline="@+id/inputField"/>
 
+    <EditText
+        android:id="@+id/messageInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputField"
+        android:hint="@string/messageInputText"/>
+
     <Button
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/inputField"
+        android:layout_below="@+id/messageInput"
         android:text="@string/buttonText"
         android:onClick="sendTime"/>
 

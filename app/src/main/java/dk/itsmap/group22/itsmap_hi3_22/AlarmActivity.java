@@ -1,9 +1,12 @@
 package dk.itsmap.group22.itsmap_hi3_22;
 
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class AlarmActivity extends ActionBarActivity {
@@ -12,6 +15,16 @@ public class AlarmActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
+        Intent intent = getIntent();
+        TextView textView = (TextView) findViewById(R.id.messageOutput);
+        String message = intent.getExtras().getString("message");
+        if (!message.isEmpty()) {
+            textView.setText(message);
+        } else {
+            textView.setTypeface(null, Typeface.ITALIC);
+            textView.setText("Nothing.");
+        }
     }
 
 

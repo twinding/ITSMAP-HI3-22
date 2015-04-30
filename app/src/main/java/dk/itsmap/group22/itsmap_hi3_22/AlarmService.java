@@ -7,14 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import java.util.Calendar;
 
 public class AlarmService extends IntentService {
 
     public static final String ALARM_MESSAGE = "dk.itsmap.group22.itsmap_hi3_22.alarm_message";
-    private static final String TAG = "AlarmServiceTest";
 
     private Runnable updateTask;
     private Handler handler = new Handler();
@@ -23,7 +21,6 @@ public class AlarmService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i(TAG, "AlarmService onHandleIntent");
         final int delay = intent.getIntExtra("data", 1);
 
         Calendar cal = Calendar.getInstance();
@@ -31,7 +28,9 @@ public class AlarmService extends IntentService {
         cal.add(Calendar.SECOND, delay);
 
         Intent newIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, newIntent, 0);
+        newIntent.putExtra("message", intent.getExtras().getString("message"));
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, newIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);

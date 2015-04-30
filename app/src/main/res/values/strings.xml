@@ -9,4 +9,6 @@
 
     <string name="new_activity">Success! A new activity has been started.</string>
     <string name="alarmMessage">"Starting new service in… "</string>
+    <string name="messageInputText">Additional message goes here</string>
+    <string name="outputInfo">You sent the following additional info:</string>
 </resources>

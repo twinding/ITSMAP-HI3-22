@@ -40,15 +40,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void sendTime(View view) {
-        EditText editText = (EditText) findViewById(R.id.inputField);
-        if (editText.getText().toString().isEmpty()) {
+        EditText timeInput = (EditText) findViewById(R.id.inputField);
+        EditText messageInput = (EditText) findViewById(R.id.messageInput);
+        if (timeInput.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please input a time", Toast.LENGTH_SHORT).show();
         } else {
             Log.i(TAG, "Attempting to start service");
             try {
-                int data = Integer.parseInt(editText.getText().toString());
+                int time = Integer.parseInt(timeInput.getText().toString());
+                String message = messageInput.getText().toString();
+
                 Intent intent = new Intent(this, AlarmService.class);
-                intent.putExtra("data", data);
+                intent.putExtra("data", time);
+                intent.putExtra("message", message);
 
                 startService(intent);
             } catch (NumberFormatException nfe) {
@@ -66,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        outputView.setText("");
         Log.i(TAG, "onResume");
     }
 
